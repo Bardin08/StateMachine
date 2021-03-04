@@ -1,1 +1,8 @@
-StateMachine/
+
+StateMachine/obj/Debug/netcoreapp3.1/StateMachine.AssemblyInfo.cs
+StateMachine/obj/
+StateMachine/bin/
+StateMachine.ConsoleApplication/obj/Debug/net5.0/apphost.exe
+StateMachine.ConsoleApplication/obj/
+.vs/
+StateMachine.ConsoleApplication/bin/
