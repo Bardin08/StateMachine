@@ -8,7 +8,7 @@ using StateMachine.Extensions;
 
 namespace StateMachine
 {
-    public class StateMachine<TState, TInput> : IStateMachine<TState, TInput>
+    public abstract class StateMachine<TState, TInput> : IStateMachine<TState, TInput>
         where TState : IState
     {
         private readonly Dictionary<HashSet<Assembly>, Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]>> knownAssemblies 
@@ -96,7 +96,7 @@ namespace StateMachine
         }
 
         /// <summary>
-        /// Finds all <see cref="Transition{TMachine, TStates, TStateIn, TWith, TStateOut}"/> derivatives in the assemblies that match this state machine.
+        /// Finds all <see cref="ITransition{TMachine, TStates, TStateIn, TWith, TStateOut}"/> derivatives in the assemblies that match this state machine.
         /// </summary>
         private IEnumerable<TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>> CollectMatchingTransitions(Assembly[] assemblies)
         {
