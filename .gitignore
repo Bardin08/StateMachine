@@ -6,3 +6,5 @@ StateMachine.ConsoleApplication/obj/Debug/net5.0/apphost.exe
 StateMachine.ConsoleApplication/obj/
 .vs/
 StateMachine.ConsoleApplication/bin/
+examples/StateMachine.ConsoleApplication/bin/Debug/net5.0/StateMachine.ConsoleApplication.deps.json
+examples/StateMachine.ConsoleApplication/obj/
