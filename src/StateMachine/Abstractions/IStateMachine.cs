@@ -9,7 +9,7 @@ namespace StateMachine.Abstractions
     /// </summary>
     /// <typeparam name="TState"> The base type of states used by this machine. </typeparam>
     /// <typeparam name="TInput"> The base type of the transition inputs used by this machine. </typeparam>
-    public interface IStateMachine<TState, TInput> 
+    public interface IStateMachine<TState, TInput>
         where TState : IState
     {
         /// <summary>
@@ -30,13 +30,5 @@ namespace StateMachine.Abstractions
         /// <param name="input"> The input to try and transition with. </param>
         /// <returns> Whether a transition was successfully executed or not. </returns>
         bool TryTransition(TInput input);
-
-        Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]> BuildStateMachine(params Assembly[] assemblies);
-        
-        /// <summary>
-        /// Finds all <see cref="Transition{TMachine, TStates, TStateIn, TWith, TStateOut}"/> derivatives in the assemblies that match this state machine.
-        /// </summary>
-        IEnumerable<TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>> CollectMatchingTransitions(Assembly[] assemblies);
-
     }
 }

@@ -11,7 +11,7 @@ namespace StateMachine
     public abstract class StateMachine<TState, TInput> : IStateMachine<TState, TInput>
         where TState : IState
     {
-        private readonly Dictionary<HashSet<Assembly>, Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]>> knownAssemblies 
+        private readonly Dictionary<HashSet<Assembly>, Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]>> knownAssemblies
             = new(new HashSetEqualityComparer<Assembly>());
         private readonly Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]> _transitions;
         private TState _currentState;
