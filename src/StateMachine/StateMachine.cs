@@ -11,7 +11,7 @@ namespace StateMachine
     public abstract class StateMachine<TState, TInput> : IStateMachine<TState, TInput>
         where TState : IState
     {
-        private readonly Dictionary<HashSet<Assembly>, Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]>> knownAssemblies
+        private readonly Dictionary<HashSet<Assembly>, Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]>> _knownAssemblies
             = new(new HashSetEqualityComparer<Assembly>());
         private readonly Dictionary<Type, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[]> _transitions;
         private TState _currentState;
@@ -19,7 +19,7 @@ namespace StateMachine
         public TState CurrentState
         {
             get => _currentState;
-            set => _currentState = value ?? throw new ArgumentNullException(nameof(value), "Current State can't be null!");
+            set => _currentState = value ?? throw new ArgumentNullException(nameof(value), "Current state can't be null!");
         }
 
         public void ForceState(TState state)
@@ -51,7 +51,20 @@ namespace StateMachine
 
         /// <summary>
         /// Creates a new instance of the <see cref="StateMachine{TState, TInput}"/> class,
-        /// looking for matching <see cref="Transition{TMachine, TState, TInputState, TInput, TOutputState}"/>s in the
+        /// with a given set of <see cref="ITransition{TMachine, TState, TInputState, TInput, TOutputState}"/>s.
+        /// </summary>
+        /// <param name="startState">The state that the state machine starts in.</param>
+        /// <param name="transitions">The set ot transitions which will be used by state machine. Requires to avoid reflection search.</param>
+        protected StateMachine(TState startState, TransitionEntry<IStateMachine<TState, TInput>, TState, TInput>[] transitions)
+        {
+            CurrentState = startState;
+
+            _transitions.Add(Assembly.GetExecutingAssembly().GetType(), transitions);
+        }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="StateMachine{TState, TInput}"/> class,
+        /// looking for matching <see cref="ITransition{TMachine, TState, TInputState, TInput, TOutputState}"/>s in the
         /// <see cref="Assembly"/> where the deriving class is defined.
         /// </summary>
         /// <param name="startState">The state that the state machine starts in.</param>
@@ -64,7 +77,7 @@ namespace StateMachine
 
         /// <summary>
         /// Creates a new instance of the <see cref="StateMachine{TStates, TWith}"/> class, looking for matching
-        /// <see cref="Transition{TMachine, TStates, TStateIn, TWith, TStateOut}"/>s in the given <see cref="Assembly"/>s.
+        /// <see cref="ITransition{TMachine, TStates, TStateIn, TWith, TStateOut}"/>s in the given <see cref="Assembly"/>s.
         /// </summary>
         /// <param name="startState">The state that the state machine starts in.</param>
         /// <param name="assemblies">The <see cref="Assembly"/>s to look for matching Transitions in.</param>
@@ -85,14 +98,14 @@ namespace StateMachine
 
             var assemblySet = new HashSet<Assembly>(assemblies);
 
-            if (!knownAssemblies.ContainsKey(assemblySet))
+            if (!_knownAssemblies.ContainsKey(assemblySet))
             {
                 var transitionsTypes = CollectMatchingTransitions(assemblies);
 
-                knownAssemblies.Add(assemblySet, transitionsTypes.GroupBy(entry => entry.InputStateType).ToDictionary(g => g.Key, g => g.ToArray()));
+                _knownAssemblies.Add(assemblySet, transitionsTypes.GroupBy(entry => entry.InputStateType).ToDictionary(g => g.Key, g => g.ToArray()));
             }
 
-            return knownAssemblies[assemblySet];
+            return _knownAssemblies[assemblySet];
         }
 
         /// <summary>

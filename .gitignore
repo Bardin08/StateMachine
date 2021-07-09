@@ -9,3 +9,5 @@ StateMachine.ConsoleApplication/bin/
 examples/StateMachine.ConsoleApplication/bin/Debug/net5.0/StateMachine.ConsoleApplication.deps.json
 examples/StateMachine.ConsoleApplication/obj/
 src/StateMachine/obj/
+.idea/
+src/StateMachine/bin/
